@@ -1,10 +1,10 @@
 const express = require("express");
-const checkValidId = require("../middlewares");
 
 const router = express.Router();
+const postModel = require("../models/post");
+const checkValidId = require("../middlewares");
 
-const userModel = require("../models/user");
-const { create, getList, deleteOne, updateOne, getOne } = require("./crud")(userModel);
+const { create, getList, deleteOne, updateOne, getOne } = require("./crud")(postModel);
 
 router.get("/", getList);
 router.post("/", create);
