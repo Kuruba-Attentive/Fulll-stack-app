@@ -4,11 +4,10 @@ import { useCreatePost, useGetPosts } from "../../hooks/queries/Posts";
 
 const initState = {
   body: "",
-  caption: "",
-  user: "64152cdcd304f5bcf913065d"
+  caption: ""
 };
 const ListOfPosts = () => {
-  const { data, isLoading, isSuccess, isFetching } = useGetPosts();
+  const { data, isLoading, isFetching } = useGetPosts();
   const [postData, setPostData] = useState(initState);
   const { mutate: createPost } = useCreatePost();
   const handleChange = e => {
@@ -16,7 +15,7 @@ const ListOfPosts = () => {
     setPostData({ ...postData, [id]: value });
   };
   return (
-    <div>
+    <>
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -47,9 +46,11 @@ const ListOfPosts = () => {
       </form>
       {(isLoading || isFetching) && <div className='w-full flex justify-center my-4'>Loading...</div>}
       <div className='flex flex-col gap-4 items-center w-full mt-4'>
-        {isSuccess && data.map(post => <PostDetails post={post} key={post._id} />)}
+        {data?.map(post => (
+          <PostDetails post={post} key={post._id} />
+        ))}
       </div>
-    </div>
+    </>
   );
 };
 

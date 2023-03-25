@@ -11,19 +11,21 @@ const getUser = token => {
 };
 
 module.exports = async (req, res, next) => {
-  if (!req.headers.authorization)
-    res.status(403).send({ message: "authorization token not provided" });
-
+  if (!req.headers.authorization) {
+    const err = new Error("Not an authorized user");
+    res.status(401);
+    return next(err.message);
+  }
   if (!req.headers.authorization.startsWith("Bearer "))
-    res
-      .status(403)
+    return res
+      .status(401)
       .send({ message: "authorization token should be bearer token" });
 
   const token = req.headers.authorization.split(" ")[1];
 
   let user = await getUser(token);
   if (user) {
-    res.user = user.user;
+    req.user = user.user;
     return next();
   } else return res.status(500).send({ message: error.message });
 };

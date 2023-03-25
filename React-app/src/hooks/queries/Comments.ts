@@ -52,7 +52,6 @@ export const useCreateComment = (): UseMutationResult<any, any, ICreateCommentBo
   const queryClient = useQueryClient();
   return useMutation<any, any, ICreateCommentBody>(data => makeComment(data), {
     onSuccess: data => {
-      console.log(data);
       queryClient.invalidateQueries(commentKeys.list(data?.post), {
         refetchInactive: true,
         exact: false

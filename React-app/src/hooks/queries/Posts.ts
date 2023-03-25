@@ -1,5 +1,6 @@
 import { useMutation, UseMutationResult, useQuery, useQueryClient } from "react-query";
-import { makeURL } from "../../constants/constants";
+import { getToken, makeURL } from "../../constants/constants";
+import { showAlert } from "../../utils/apiUtils";
 
 const postKeys = {
   posts: "posts",
@@ -22,13 +23,16 @@ const createPost = async (data: IPostBody) => {
   const response = await fetch(URL, {
     method: "POST",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json" }
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${JSON.parse(getToken())}` }
   });
-  return response;
+  return response.json();
 };
 
 const deletePost = async (id: string) => {
-  const response = await fetch(URL + "/" + id, { method: "DELETE" });
+  const response = await fetch(URL + "/" + id, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${JSON.parse(getToken())}` }
+  });
   return response;
 };
 
@@ -43,7 +47,13 @@ export const useGetPosts = () => {
 export const useCreatePost = (): UseMutationResult<any, any, IPostBody> => {
   const queryClient = useQueryClient();
   return useMutation(data => createPost(data), {
-    onSuccess: () => queryClient.invalidateQueries(postKeys.list())
+    onSuccess: () => {
+      queryClient.invalidateQueries(postKeys.list());
+    },
+    onError: e => {
+      console.log(e);
+      showAlert("Failed to create post");
+    }
   });
 };
 

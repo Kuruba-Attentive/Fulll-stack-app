@@ -16,9 +16,9 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
     setComment(e.target.value);
   };
   return (
-    <div div className='bg-gray-50 rounded-lg shadow-sm w-[50%] p-4'>
-      <p className='text-lg font-bold flex justify-between'>
-        <div>{caption}</div>
+    <div className='bg-gray-50 rounded-lg shadow-sm w-[50%] p-4'>
+      <div className='text-lg font-bold flex justify-between'>
+        <span>{caption}</span>
         <button
           className='text-2xl'
           onClick={() => {
@@ -27,9 +27,9 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
         >
           <AiFillDelete />
         </button>
-      </p>
+      </div>
       <p className=''>{body}</p>
-      <div className='font-bold my-4'>Comments</div>
+      <p className='font-bold my-4'>Comments</p>
       <input
         type='text'
         placeholder='comment...'
@@ -43,7 +43,11 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
         }}
         className='border border-black outline-none p-2 bg-inherit rounded-lg w-full'
       />
-      <div className=''>{data && data.map(comment => <Comment comment={comment} post={_id} />)}</div>
+      <div className=''>
+        {data?.map(comment => (
+          <Comment key={comment._id} comment={comment} post={_id} />
+        ))}
+      </div>
     </div>
   );
 };
