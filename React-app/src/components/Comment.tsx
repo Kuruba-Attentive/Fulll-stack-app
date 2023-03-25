@@ -1,5 +1,5 @@
 import React from "react";
-import { AiFillDelete } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { useQueryClient } from "react-query";
 import { commentKeys, useDeleteComment } from "../hooks/queries/Comments";
 
@@ -10,12 +10,12 @@ const Comment = ({ comment, post }: any) => {
     <div className='flex gap-4'>
       <div className='bg-white my-2 p-2 rounded-lg w-full  '>{comment?.comment}</div>
       <button
-        className='text-2xl'
+        className='text-xl'
         onClick={() => {
           mutateAsync(comment._id).then(() => queryClient.invalidateQueries(commentKeys.list(post)));
         }}
       >
-        <AiFillDelete />
+        <AiOutlineDelete />
       </button>
     </div>
   );

@@ -1,7 +1,8 @@
 const express = require("express");
 
 const commentModel = require("../models/comment");
-const { create, deleteOne, updateOne, getOne } = require("./crud")(commentModel);
+const { create, deleteOne, updateOne, getOne } =
+  require("./crud")(commentModel);
 const checkValidId = require("../middlewares/index");
 const router = express.Router();
 
@@ -9,6 +10,7 @@ router.get("/", async (req, res) => {
   try {
     const commentsList = await commentModel
       .find({ ...req.query })
+      .sort({ updatedAt: -1 })
       // .populate({
       //   path: "post",
       //   select: ["body", "caption"],

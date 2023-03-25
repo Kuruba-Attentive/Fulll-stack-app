@@ -3,7 +3,7 @@ import { makeURL } from "../../constants/constants";
 
 const postKeys = {
   posts: "posts",
-  list: (...args: any) => [postKeys.posts, ...args]
+  list: (...args: any[]) => [postKeys.posts, ...args]
 };
 
 const URL = makeURL("posts");
@@ -27,6 +27,10 @@ const createPost = async (data: IPostBody) => {
   return response;
 };
 
+const deletePost = async (id: string) => {
+  const response = await fetch(URL + "/" + id, { method: "DELETE" });
+  return response;
+};
 
 export const useGetPosts = () => {
   return useQuery(postKeys.list(), getPostsList, {
@@ -43,4 +47,10 @@ export const useCreatePost = (): UseMutationResult<any, any, IPostBody> => {
   });
 };
 
-
+export const useDeletePost = (id: string, config = {}): UseMutationResult<any> => {
+  const queryClient = useQueryClient();
+  return useMutation(() => deletePost(id), {
+    ...config,
+    onSuccess: () => queryClient.invalidateQueries(postKeys.list())
+  });
+};

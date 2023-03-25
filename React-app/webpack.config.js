@@ -17,7 +17,10 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: "babel-loader",
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        options: {
+          presets: ["@babel/preset-env", "@babel/preset-react"]
+        }
       },
       {
         test: /\.css$/,
@@ -28,10 +31,15 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".ts", ".jsx", ".tsx"]
+    // fallback: { path: require.resolve("path-browserify") }
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/main.html"
     })
-  ]
+  ],
+
+  devServer: {
+    historyApiFallback: true
+  }
 };
