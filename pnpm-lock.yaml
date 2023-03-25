@@ -8,6 +8,7 @@ specifiers:
   jsonwebtoken: ^9.0.0
   mongoose: ^7.0.2
   nodemon: ^2.0.21
+  react-icons: ^4.8.0
 
 dependencies:
   bcryptjs: 2.4.3
@@ -17,6 +18,9 @@ dependencies:
   jsonwebtoken: 9.0.0
   mongoose: 7.0.2
   nodemon: 2.0.21
+
+devDependencies:
+  react-icons: 4.8.0
 
 packages:
 
@@ -682,6 +686,12 @@ packages:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
     dev: false
+
+  /react-icons/4.8.0:
+    resolution: {integrity: sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==}
+    peerDependencies:
+      react: '*'
+    dev: true
 
   /readdirp/3.6.0:
     resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
