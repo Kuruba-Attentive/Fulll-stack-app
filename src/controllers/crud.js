@@ -1,6 +1,9 @@
 const getList = Model => async (req, res) => {
   try {
-    const list = await Model.find().sort({ updatedAt: -1 }).lean().exec();
+    const list = await Model.find({ ...(req.query && { ...req.query }) })
+      .sort({ updatedAt: -1 })
+      .lean()
+      .exec();
     res.send(list);
   } catch (error) {
     res.status(400).send({ error });
@@ -27,7 +30,11 @@ const create = Model => async (req, res) => {
 
 const updateOne = Model => async (req, res) => {
   try {
-    const deletedEntity = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const deletedEntity = await Model.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     res.send(deletedEntity);
   } catch (e) {
     sendErrorResponse(e, res);

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const getUser = token => {
   return new Promise((resolve, reject) => {
+    if (!token) reject({ message: "authorization token missing" });
     jwt.verify(token, process.env.Jwt_Secret_Key, (err, user) => {
       if (err) return reject(err);
       resolve(user);
@@ -27,5 +28,5 @@ module.exports = async (req, res, next) => {
   if (user) {
     req.user = user.user;
     return next();
-  } else return res.status(500).send({ message: error.message });
+  } else return res.status(401).send({ message: error.message });
 };

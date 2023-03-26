@@ -8,29 +8,37 @@ const generateToken = user => {
 };
 
 const register = async (req, res) => {
-  let user = await userModel.findOne({ email: req.body.email });
-  if (user) return res.status(400).send({ message: "user already exist" });
-  user = await userModel.create(req.body);
-  const token = generateToken(user);
-  return res.send({ user, token });
+  try {
+    let user = await userModel.findOne({ email: req.body.email });
+    if (user) return res.status(400).send({ message: "user already exist" });
+    user = await userModel.create(req.body);
+    const token = generateToken(user);
+    return res.send({ user, token });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
 };
 
 const login = async (req, res) => {
-  let user = await userModel.findOne({ email: req.body.email });
-  if (!user)
-    return res
-      .status(400)
-      .send({ message: "Please check entered email or password" });
+  try {
+    let user = await userModel.findOne({ email: req.body.email });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Please check entered email or password" });
 
-  const match = user.matchPassword(req.body.password);
+    const match = user.matchPassword(req.body.password);
 
-  if (!match)
-    return res
-      .status(400)
-      .send({ message: "Please check entered email or password" });
+    if (!match)
+      return res
+        .status(404)
+        .json({ message: "Please check entered email or password" });
 
-  const token = generateToken(user);
-  return res.send({ user, token });
+    const token = generateToken(user);
+    return res.send({ user, token });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
 };
 
 module.exports = { register, login };

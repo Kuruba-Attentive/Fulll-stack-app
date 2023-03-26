@@ -1,4 +1,9 @@
-import { useMutation, UseMutationResult, useQuery, useQueryClient } from "react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient
+} from "react-query";
 import { makeURL } from "../../constants/constants";
 
 export const commentKeys = {
@@ -16,6 +21,7 @@ const getComments = async (postId: string) => {
 interface ICreateCommentBody {
   comment: string;
   post: string;
+  user: string;
 }
 
 interface ICommentDetailResponse extends ICreateCommentBody {
@@ -48,7 +54,11 @@ export const useGetComments = (postId: string, config = {}) => {
   });
 };
 
-export const useCreateComment = (): UseMutationResult<any, any, ICreateCommentBody> => {
+export const useCreateComment = (): UseMutationResult<
+  any,
+  any,
+  ICreateCommentBody
+> => {
   const queryClient = useQueryClient();
   return useMutation<any, any, ICreateCommentBody>(data => makeComment(data), {
     onSuccess: data => {
@@ -60,8 +70,14 @@ export const useCreateComment = (): UseMutationResult<any, any, ICreateCommentBo
   });
 };
 
-export const useDeleteComment = (commentId:string, config = {}): UseMutationResult<any, any, ICommentDetailResponse> => {
-  return useMutation<any, any, ICommentDetailResponse>(() => deleteComment(commentId), {
-    ...config
-  });
+export const useDeleteComment = (
+  commentId: string,
+  config = {}
+): UseMutationResult<any, any, ICommentDetailResponse> => {
+  return useMutation<any, any, ICommentDetailResponse>(
+    () => deleteComment(commentId),
+    {
+      ...config
+    }
+  );
 };

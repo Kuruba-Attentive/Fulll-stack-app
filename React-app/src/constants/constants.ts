@@ -10,4 +10,4 @@ export const DEFAULT_QUERY_CONFIG = {
   retry: 0
 };
 
-export const getToken = () => localStorage.getItem("token");
+export const getToken = () => localStorage.getItem("token") || "";

@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { AiFillDelete } from "react-icons/ai";
+import { useGetMe } from "../hooks/queries/Auth";
 import { useCreateComment, useGetComments } from "../hooks/queries/Comments";
 import { useDeletePost } from "../hooks/queries/Posts";
 import Comment from "./Comment";
 
-const PostDetails = ({ post: { _id, body, caption } }: any) => {
+const PostDetails = ({ post }: any) => {
+  const { _id, body, caption, user: postOwner } = post || {};
   const { data } = useGetComments(_id, {
     enabled: !!_id
   });
   const [comment, setComment] = useState("");
   const { mutate: createComment } = useCreateComment();
   const { mutate: deletePost } = useDeletePost(_id);
+  const { data: user } = useGetMe();
 
   const handleChange = e => {
     setComment(e.target.value);
@@ -19,14 +22,16 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
     <div className='bg-gray-50 rounded-lg shadow-sm w-[50%] p-4'>
       <div className='text-lg font-bold flex justify-between'>
         <span>{caption}</span>
-        <button
-          className='text-2xl'
-          onClick={() => {
-            deletePost(_id);
-          }}
-        >
-          <AiFillDelete />
-        </button>
+        {user?._id === postOwner?._id && (
+          <button
+            className='text-2xl'
+            onClick={() => {
+              deletePost(_id);
+            }}
+          >
+            <AiFillDelete />
+          </button>
+        )}
       </div>
       <p className=''>{body}</p>
       <p className='font-bold my-4'>Comments</p>
@@ -37,7 +42,7 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
         onChange={handleChange}
         onKeyDown={e => {
           if (e.key === "Enter") {
-            createComment({ comment: comment, post: _id });
+            createComment({ comment: comment, post: _id, user: user?._id });
             setComment("");
           }
         }}
@@ -45,7 +50,12 @@ const PostDetails = ({ post: { _id, body, caption } }: any) => {
       />
       <div className=''>
         {data?.map(comment => (
-          <Comment key={comment._id} comment={comment} post={_id} />
+          <Comment
+            key={comment?._id}
+            comment={comment}
+            post={_id}
+            isMyPost={user?._id === postOwner?._id}
+          />
         ))}
       </div>
     </div>

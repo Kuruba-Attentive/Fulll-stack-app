@@ -1,6 +1,7 @@
 import { useMutation, UseMutationResult, useQuery, useQueryClient } from "react-query";
 import { getToken, makeURL } from "../../constants/constants";
 import { showAlert } from "../../utils/apiUtils";
+import { addQueryParamsToURL } from "../../utils/helpers";
 
 const postKeys = {
   posts: "posts",
@@ -8,8 +9,8 @@ const postKeys = {
 };
 
 const URL = makeURL("posts");
-const getPostsList = async () => {
-  const list = await fetch(URL);
+const getPostsList = async (params = {}) => {
+  const list = await fetch(addQueryParamsToURL(URL, params));
   return await list.json();
 };
 
@@ -36,8 +37,9 @@ const deletePost = async (id: string) => {
   return response;
 };
 
-export const useGetPosts = () => {
-  return useQuery(postKeys.list(), getPostsList, {
+export const useGetPosts = (params = {}, config = {}) => {
+  return useQuery(postKeys.list(params), () => getPostsList(params), {
+    ...config,
     retry: 0,
     refetchOnReconnect: true,
     refetchOnWindowFocus: false

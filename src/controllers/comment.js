@@ -11,14 +11,18 @@ router.get("/", async (req, res) => {
     const commentsList = await commentModel
       .find({ ...req.query })
       .sort({ updatedAt: -1 })
-      // .populate({
-      //   path: "post",
-      //   select: ["body", "caption"],
-      //   populate: {
-      //     path: "user",
-      //     select: ["name", "age", "gender"]
-      //   }
-      // })
+      .populate({
+        path: "user",
+        select: ["name"]
+      })
+      .populate({
+        path: "post",
+        select: ["_id"],
+        populate: {
+          path: "user",
+          select: ["_id"]
+        }
+      })
       .lean()
       .exec();
     res.json(commentsList);
