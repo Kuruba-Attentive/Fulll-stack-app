@@ -18,3 +18,5 @@ export const addQueryParamsToURL = (url: string, params = {}) => {
       .map(key => key + "=" + encodeURIComponent(params[key]))
       .join("&"));
 };
+
+export const getFirstName = (name: string) => name.split(" ")[0];

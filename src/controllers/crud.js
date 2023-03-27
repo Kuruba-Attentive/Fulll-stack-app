@@ -59,5 +59,5 @@ module.exports = model => ({
 });
 
 const sendErrorResponse = (error, res) => {
-  res.send({ error });
+  res.status(400).send({ error });
 };

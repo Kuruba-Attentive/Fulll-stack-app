@@ -3,6 +3,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { useGetMe } from "../hooks/queries/Auth";
 import { useCreateComment, useGetComments } from "../hooks/queries/Comments";
 import { useDeletePost } from "../hooks/queries/Posts";
+import { getFirstName } from "../utils/helpers";
 import Comment from "./Comment";
 
 const PostDetails = ({ post }: any) => {
@@ -21,7 +22,11 @@ const PostDetails = ({ post }: any) => {
   return (
     <div className='bg-gray-50 rounded-lg shadow-sm w-[50%] p-4'>
       <div className='text-lg font-bold flex justify-between'>
-        <span>{caption}</span>
+        <div>
+          <span>Author : {getFirstName(postOwner?.name)}</span>
+          <br />
+          <span className='mt-2'>{caption}</span>
+        </div>
         {user?._id === postOwner?._id && (
           <button
             className='text-2xl'
